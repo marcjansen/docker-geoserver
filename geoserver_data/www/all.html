@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>All</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
+    <script src="https://rawgit.com/boundlessgeo/mapbox-to-ol-style/v3.4.0/dist/mb2olstyle.js"></script>
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+    .wrapper {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        justify-content: center;
+    }
+    .map {
+        width: 45%;
+        height: 90%;
+        float: left;
+        margin: 1%;
+    }
+    .map span {
+        font-weight: bold;
+        font-family: Arial;
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="map1" class="map">
+            <span>WMS mit SLD</span>
+        </div>
+        <div id="map2" class="map">
+            <span>WMS mit CSS</span>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div id="map3" class="map">
+            <span>WMS mit MBStyle</span>
+        </div>
+        <div id="map4" class="map">
+            <span>VectorTiles mit MBStyle</span>
+        </div>
+    </div>
+    <script>
+    const layername = 'terrestris:bundeslaender';
+    const view = new ol.View({
+        center: [1314151.416083164, 6598649.067132136],
+        zoom: 3
+    });
+    const osm = new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+            url: 'https://ows.terrestris.de/osm-gray/service',
+            params: {'LAYERS': 'OSM-WMS', 'TILED': true},
+            serverType: 'geoserver'
+        }),
+        opacity: 0.7
+    });
+    const vectorTilesLayer = new ol.layer.VectorTile({
+      source: new ol.source.VectorTile({
+        tilePixelRatio: 1, // oversampling when > 1
+        tileGrid: ol.tilegrid.createXYZ({maxZoom: 19}),
+        format: new ol.format.MVT(),
+        url: '/geoserver/gwc/service/tms/1.0.0/' + layername +
+            '@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf',
+        attributions: '© GeoBasis-DE / BKG 2018, verändert.'
+      }),
+      declutter: true
+    });
+    const makeMap = (id) => {
+        return new ol.Map({
+            target: id,
+            view: view,
+            layers: [osm]
+        });
+    };
+    const addWmsBundeslaender = (map, style) => {
+        const wms = new ol.layer.Tile({
+            source: new ol.source.TileWMS({
+                url: '/geoserver/ows',
+                params: {'LAYERS': layername, 'STYLES': style},
+                serverType: 'geoserver',
+                attributions: '© GeoBasis-DE / BKG 2018, verändert.'
+            })
+        });
+        map.addLayer(wms);
+    };
+
+    const fetchAndApplyStyleThenAddLayer = (map) => {
+        const client = new XMLHttpRequest();
+        client.open('GET', '/geoserver/rest/styles/complex-mbstyle.mbstyle');
+        client.setRequestHeader('Authorization', 'Basic ' + btoa('admin:geoserver'));
+        client.onload = function() {
+            var glStyle = JSON.parse(client.responseText);
+            mb2olstyle(vectorTilesLayer, glStyle, layername);
+            map.addLayer(vectorTilesLayer);
+        };
+        client.send();
+    }
+
+    const map1 = makeMap('map1');
+    const map2 = makeMap('map2');
+    const map3 = makeMap('map3');
+    const map4 = makeMap('map4');
+
+    addWmsBundeslaender(map1, 'complex-sld');
+    addWmsBundeslaender(map2, 'complex-css');
+    addWmsBundeslaender(map3, 'complex-mbstyle');
+    fetchAndApplyStyleThenAddLayer(map4);
+
+    var rotateInterval;
+    var rotationStep = Math.PI / 80;
+    const stopRotate = () => {
+        if (rotateInterval) {
+            window.clearInterval(rotateInterval);
+            rotateInterval = null;
+        }
+    }
+    const startRotate = () => {
+        rotateInterval = window.setInterval(() => {
+            var rotation = view.getRotation() + rotationStep;
+            view.setRotation(rotation >= 2 * Math.PI ? 0 : rotation)
+        }, 60);
+    }
+    document.body.addEventListener('click', () => { rotateInterval ? stopRotate() : startRotate() });
+    </script>
+</body>
+</html>

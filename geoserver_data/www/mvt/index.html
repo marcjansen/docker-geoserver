@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mapbox Vectortiles with Mapbox styling</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
+    <script src="https://rawgit.com/boundlessgeo/mapbox-to-ol-style/v3.4.0/dist/mb2olstyle.js"></script>
+    <style>
+       html, body {
+          height: 100%;
+          margin: 0;
+      }
+      .map {
+          min-height: 98%;
+          background: #f8f4f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script>
+
+
+var layername = 'terrestris:bundeslaender';
+var projection = '900913';
+
+
+var layer = new ol.layer.VectorTile({
+  source: new ol.source.VectorTile({
+    tilePixelRatio: 1, // oversampling when > 1
+    tileGrid: ol.tilegrid.createXYZ({maxZoom: 19}),
+    format: new ol.format.MVT(),
+    url: '/geoserver/gwc/service/tms/1.0.0/' + layername +
+        '@EPSG%3A' + projection + '@pbf/{z}/{x}/{-y}.pbf'
+  }),
+  declutter: true
+});
+
+var map = new ol.Map({
+  target: 'map',
+  view: new ol.View({
+    center: [1314151.416083164, 6598649.067132136],
+    zoom: 3
+  })
+});
+
+function fetchAndApplyStyle() {
+    if (map.getLayers().getArray().length > 0) {
+        map.removeLayer(layer)
+    }
+    var client = new XMLHttpRequest();
+    client.open('GET', '/geoserver/rest/styles/complex-mbstyle.mbstyle');
+    client.onload = function() {
+        var glStyle = JSON.parse(client.responseText);
+        mb2olstyle(layer, glStyle, layername);
+        map.addLayer(layer);
+    };
+    client.send();
+}
+
+fetchAndApplyStyle();
+
+
+// function mj() {
+//     var style_simple = new ol.style.Style({
+//       fill: new ol.style.Fill({
+//         color: '#ADD8E6'
+//       }),
+//       stroke: new ol.style.Stroke({
+//         color: '#880000',
+//         width: 1
+//       })
+//     });
+//
+//     function simpleStyle(feature) {
+//       return style_simple;
+//     }
+//     layer.setStyle(simpleStyle);
+// }
+
+    </script>
+  </body>
+</html>

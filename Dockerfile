@@ -53,6 +53,30 @@ RUN rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar
 RUN curl -jkSL -o $CATALINA_HOME/lib/marlin.jar https://github.com/bourgesl/marlin-renderer/releases/download/v$MARLIN_VERSION/marlin-$MARLIN_VERSION-Unsafe.jar && \
     curl -jkSL -o $CATALINA_HOME/lib/marlin-sun-java2d.jar https://github.com/bourgesl/marlin-renderer/releases/download/v$MARLIN_VERSION/marlin-$MARLIN_VERSION-Unsafe-sun-java2d.jar
 
+# Install MBStyle extension
+#RUN curl -jkSL -o /tmp/geoserver-2.12-SNAPSHOT-mbstyle-plugin.zip http://ares.opengeo.org/geoserver/2.12.x/community-latest/geoserver-2.12-SNAPSHOT-mbstyle-plugin.zip && \
+#    mkdir -p /tmp/mbstyle-plugin && \
+#    unzip /tmp/geoserver-2.12-SNAPSHOT-mbstyle-plugin.zip -d /tmp/mbstyle-plugin/ && \
+#    mv /tmp/mbstyle-plugin/g[st]-mbstyle*.jar $GEOSERVER_LIB_DIR && \
+#    rm -rf /tmp/mbstyle-plugin && \
+#    rm /tmp/geoserver-2.12-SNAPSHOT-mbstyle-plugin.zip
+
+# Install Mapbox vector tiles extensions
+#RUN curl -jkSL -o /tmp/geoserver-2.12.2-vectortiles-plugin.zip http://sourceforge.net/projects/geoserver/files/GeoServer/2.12.2/extensions/geoserver-2.12.2-vectortiles-plugin.zip && \
+#    mkdir -p /tmp/mvt-plugin && \
+#    unzip /tmp/geoserver-2.12.2-vectortiles-plugin.zip -d /tmp/mvt-plugin/ && \
+#    mv /tmp/mvt-plugin/*.jar $GEOSERVER_LIB_DIR && \
+#    rm -rf /tmp/mvt-plugin && \
+#    rm /tmp/geoserver-2.12.2-vectortiles-plugin.zip
+
+# Install CSS extension
+#RUN curl -jkSL -o /tmp/geoserver-2.12.2-css-plugin.zip http://sourceforge.net/projects/geoserver/files/GeoServer/2.12.2/extensions/geoserver-2.12.2-css-plugin.zip && \
+#    mkdir -p /tmp/cssstyle-plugin && \
+#    unzip /tmp/geoserver-2.12.2-css-plugin.zip -d /tmp/cssstyle-plugin/ && \
+#    mv /tmp/cssstyle-plugin/*.jar $GEOSERVER_LIB_DIR && \
+#    rm -rf /tmp/cssstyle-plugin/ && \
+#    rm /tmp/geoserver-2.12.2-css-plugin.zip
+
 # cleanup
 RUN apk del curl && \
     rm -rf /tmp/* /var/cache/apk/*

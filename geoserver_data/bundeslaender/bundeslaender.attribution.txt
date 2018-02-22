@@ -1,0 +1,10 @@
+© GeoBasis-DE / BKG 2018, verändert.
+
+http://www.bkg.bund.de
+
+http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=5&gdz_anz_zeile=1&gdz_unt_zeile=19&gdz_user_id=0
+
+
+Bevölkerung (2016): https://de.statista.com/statistik/daten/studie/71085/umfrage/verteilung-der-einwohnerzahl-nach-bundeslaendern/
+Fläche (2015, km²):
+Bevölkerungsdichte: Berechnet aus s.o.

@@ -1,0 +1,33 @@
+* {
+  fill-opacity: 0.75;
+  stroke: #ffffff;
+  stroke-width: 1;
+  label: [kuerzel];
+  label-anchor: 0.5 0.5;
+  font-family: Dialog;
+  font-size: 14px;
+  font-fill: #333333;
+  halo-color: #ffffff;
+  halo-radius: 1;
+}
+
+[dense<133.2] {
+  fill: #1a9641;
+}
+[dense>=133.2] [dense<183.2] {
+  fill: #a6d96a;
+}
+[dense>=183.2] [dense<294.2] {
+  fill: #ffffc0;
+}
+[dense>=294.2] [dense<524.5] {
+  fill: #fdae61;
+}
+[dense>=524.5] {
+  fill: #d7191c;
+}
+
+[GEN='Bayern'] {
+  fill: #000000;
+  fill-opacity: 1;
+}

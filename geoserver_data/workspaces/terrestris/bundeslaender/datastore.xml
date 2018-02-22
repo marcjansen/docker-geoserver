@@ -1,0 +1,22 @@
+<dataStore>
+  <id>DataStoreInfoImpl-f0329c9:161c2e95ea8:-8000</id>
+  <name>bundeslaender</name>
+  <type>Shapefile</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--4a761455:1606460d7f9:-7fff</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="charset">UTF-8</entry>
+    <entry key="filetype">shapefile</entry>
+    <entry key="create spatial index">true</entry>
+    <entry key="memory mapped buffer">false</entry>
+    <entry key="timezone">GMT</entry>
+    <entry key="enable spatial index">true</entry>
+    <entry key="namespace">https://www.terrestris.de/</entry>
+    <entry key="cache and reuse memory maps">true</entry>
+    <entry key="url">file:bundeslaender/bundeslaender.shp</entry>
+    <entry key="fstype">shape</entry>
+  </connectionParameters>
+  <__default>false</__default>
+</dataStore>
